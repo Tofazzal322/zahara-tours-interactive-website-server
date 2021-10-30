@@ -61,10 +61,11 @@ async function run() {
 
         // My Booking manage  Api
         app.get("/booking/:email", async (req, res) => {
-            const result = await bookingCollection.find({
-            email: req.params.email,
+            const email =req.params.email
+            const result = await bookingCollection.findOne({
+            email
             }).toArray();
-            res.json(result);
+            res.send(result);
                 });
         
 
@@ -82,6 +83,15 @@ async function run() {
             const result = await bookingCollection.deleteOne(query);
             res.json(result);
         })
+
+        
+        app.delete('/packages/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await packagesCollection.deleteOne(query);
+            res.json(result);
+        })
+
 
 
         //  Search Packages
