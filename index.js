@@ -104,7 +104,7 @@ async function run() {
 run().catch(console.dir);
 
 app.get('/', (req, res) => {
-    res.send('Running Zahara Tours Server running ');
+    res.send('Running Zahara Tours Server is running ');
 });
 
 
