@@ -61,12 +61,13 @@ async function run() {
 
         // My Booking manage  Api
         app.get("/booking/:email", async (req, res) => {
-            const email =req.params.email
-            const result = await bookingCollection.findOne({
-            email
-            }).toArray();
-            res.send(result);
-                });
+          const result = await bookingCollection
+            .findOne({
+              email: req.params.email,
+            })
+            .toArray();
+          res.send(result);
+        });
         
 
         //  Manage All Booking & Tours
