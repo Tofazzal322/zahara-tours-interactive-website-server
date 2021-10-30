@@ -44,6 +44,7 @@ async function run() {
         })
 
         // POST Packages collection API
+        /////////////////////////////
         app.post('/packages', async (req, res) => {
             const service = req.body;
             const result = await packagesCollection.insertOne(service);
