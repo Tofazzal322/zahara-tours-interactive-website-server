@@ -68,14 +68,28 @@ async function run() {
         res.json(result);
       });
 
-      //  Get single booking from Booking collection  Api
-      // app.get("/booking/:bookId", async (req, res) => {
-      //   const id = req.params.bookId;
-      //   console.log("getting specific booking");
-      //   const query = { _id: ObjectId(id) };
-      //   const service = await bookingCollection.findOne(query);
-      //   res.send(service);
-      // });
+       app.put("/booking/:id", async (req, res) => {
+         const id = req.params.id;
+         const updatedUser = req.body;
+         const filter = { _id: ObjectId(id) };
+         const options = { upsert: true };
+         const updateDoc = {
+           $set: {
+             name: updatedUser.name,
+             email: updatedUser.email,
+             status: updatedUser.status
+           },
+         };
+         const result = await bookingCollection.updateOne(
+           filter,
+           updateDoc,
+           options
+         );
+         console.log("updating", id);
+         res.json(result);
+       });
+
+     
 
       // POST Booking collection  API
       app.post("/booking", async (req, res) => {
