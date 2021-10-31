@@ -69,13 +69,13 @@ async function run() {
       });
 
       //  Get single booking from Booking collection  Api
-      app.get("/booking/:bookId", async (req, res) => {
-        const id = req.params.bookId;
-        console.log("getting specific booking", id);
-        const query = { _id: ObjectId(id) };
-        const service = await bookingCollection.findOne(query);
-        res.send(service);
-      });
+      // app.get("/booking/:bookId", async (req, res) => {
+      //   const id = req.params.bookId;
+      //   console.log("getting specific booking");
+      //   const query = { _id: ObjectId(id) };
+      //   const service = await bookingCollection.findOne(query);
+      //   res.send(service);
+      // });
 
       // POST Booking collection  API
       app.post("/booking", async (req, res) => {
@@ -85,13 +85,22 @@ async function run() {
       });
 
       // My Booking manage  Api
+      //   app.get("/booking/:email", async (req, res) => {
+      //     const result = await bookingCollection.find({
+      //         email: req.params.email,
+      //       })
+      //       .toArray();
+      //     res.json(result);
+      //   });
+
       app.get("/booking/:email", async (req, res) => {
+        console.log(req.params.email);
         const result = await bookingCollection
           .find({
             email: req.params.email,
           })
           .toArray();
-        res.json(result);
+        res.send(result);
       });
 
       // DELETE Single booking  API
@@ -104,7 +113,7 @@ async function run() {
 
       //   New added update API
       app.put("/booking/:bookId", async (req, res) => {
-        const id = req.params.id;
+        const id = req.params.bookId;
         const updateBooking = req.body;
         const query = { _id: ObjectId(id) };
         const options = { upsert: true };
