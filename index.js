@@ -37,7 +37,16 @@ async function run() {
         // GET Single Package
         app.get('/packages/:bookId', async (req, res) => {
             const id = req.params.bookId;
-            console.log('getting specific service', id);
+            console.log('getting specific packages', id);
+            const query = { _id: ObjectId(id) };
+            const service = await packagesCollection.findOne(query);
+            res.send(service);
+        })
+
+//  Get single booking from Booking collection  Api
+        app.get('/booking/:bookId', async (req, res) => {
+            const id = req.params.bookId;
+            console.log('getting specific booking', id);
             const query = { _id: ObjectId(id) };
             const service = await packagesCollection.findOne(query);
             res.send(service);
