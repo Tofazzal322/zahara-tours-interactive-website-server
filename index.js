@@ -52,7 +52,7 @@ async function run() {
         res.json(result);
       });
 
-      // /////////////////////////
+      // Delete Packages /////////////////////////
       app.delete("/packages/:id", async (req, res) => {
         const id = req.params.id;
         const query = { _id: ObjectId(id) };
@@ -84,15 +84,7 @@ async function run() {
         res.json(result);
       });
 
-      // My Booking manage  Api
-      //   app.get("/booking/:email", async (req, res) => {
-      //     const result = await bookingCollection.find({
-      //         email: req.params.email,
-      //       })
-      //       .toArray();
-      //     res.json(result);
-      //   });
-
+      //  Booking collection 
       app.get("/booking/:email", async (req, res) => {
         console.log(req.params.email);
         const result = await bookingCollection
