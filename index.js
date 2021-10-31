@@ -87,7 +87,7 @@ async function run() {
       // My Booking manage  Api
       app.get("/booking/:email", async (req, res) => {
         const result = await bookingCollection
-          .findOne({
+          .find({
             email: req.params.email,
           })
           .toArray();
