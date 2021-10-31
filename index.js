@@ -22,118 +22,115 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
 
     try {
-        await client.connect();
-        const database = client.db('zahara-tours');
-        const packagesCollection = database.collection('packages');
-         const bookingCollection = database.collection('booking');
+      await client.connect();
+      const database = client.db("zahara-tours");
+      const packagesCollection = database.collection("packages");
+      const bookingCollection = database.collection("booking");
 
-        // GET API
-        app.get('/packages', async (req, res) => {
-            const cursor = packagesCollection.find({});
-            const services = await cursor.toArray();
-            res.json(services);
-        });
+      //////////////////////// PACKAGES COLLECTION ///////////////////////////////////////////////
+      // GET API
+      app.get("/packages", async (req, res) => {
+        const cursor = packagesCollection.find({});
+        const services = await cursor.toArray();
+        res.json(services);
+      });
 
-        // GET Single Package
-        app.get('/packages/:bookId', async (req, res) => {
-            const id = req.params.bookId;
-            console.log('getting specific packages', id);
-            const query = { _id: ObjectId(id) };
-            const service = await packagesCollection.findOne(query);
-            res.send(service);
-        })
+      // GET Single Package
+      app.get("/packages/:bookId", async (req, res) => {
+        const id = req.params.bookId;
+        console.log("getting specific packages", id);
+        const query = { _id: ObjectId(id) };
+        const service = await packagesCollection.findOne(query);
+        res.send(service);
+      });
 
-//  Get single booking from Booking collection  Api
-        app.get('/booking/:bookId', async (req, res) => {
-            const id = req.params.bookId;
-            console.log('getting specific booking', id);
-            const query = { _id: ObjectId(id) };
-            const service = await packagesCollection.findOne(query);
-            res.send(service);
-        })
+      // POST Packages collection API
+      /////////////////////////////
+      app.post("/packages", async (req, res) => {
+        const service = req.body;
+        const result = await packagesCollection.insertOne(service);
+        res.json(result);
+      });
 
-        // POST Packages collection API
-        /////////////////////////////
-        app.post('/packages', async (req, res) => {
-            const service = req.body;
-            const result = await packagesCollection.insertOne(service);
-            res.json(result)
-        });
+      // /////////////////////////
+      app.delete("/packages/:id", async (req, res) => {
+        const id = req.params.id;
+        const query = { _id: ObjectId(id) };
+        const result = await packagesCollection.deleteOne(query);
+        res.json(result);
+      });
 
-        
-        // POST Booking collection  API
-        app.post('/booking', async (req, res) => {
-            const service = req.body;
-            const result = await bookingCollection.insertOne(service);
-            res.json(result)
-        });
+      ////////////////////////////////////   BOOKING COLLECTION ///////////////////////////
 
-        // My Booking manage  Api
-        app.get("/booking/:email", async (req, res) => {
-          const result = await bookingCollection
-            .find({
-              email: req.params.email,
-            })
-            .toArray();
-          res.send(result);
-        });
-        
+      // Get All  Booking From booking Collection Api
+      app.get("/booking", async (req, res) => {
+        const result = await bookingCollection.find({}).toArray();
+        res.json(result);
+      });
 
-        //  Manage All Booking & Tours
-        app.get("/booking", async (req, res) => {
-            const result = await bookingCollection.find({}).toArray();
-            res.json(result);
-        });
+      //  Get single booking from Booking collection  Api
+      app.get("/booking/:bookId", async (req, res) => {
+        const id = req.params.bookId;
+        console.log("getting specific booking", id);
+        const query = { _id: ObjectId(id) };
+        const service = await bookingCollection.findOne(query);
+        res.send(service);
+      });
 
-        
-           // DELETE Single booking  API
-        app.delete('/booking/:id', async (req, res) => {
-            const id = req.params.id;
-            const query = { _id: ObjectId(id) };
-            const result = await bookingCollection.deleteOne(query);
-            res.json(result);
-        })
+      // POST Booking collection  API
+      app.post("/booking", async (req, res) => {
+        const service = req.body;
+        const result = await bookingCollection.insertOne(service);
+        res.json(result);
+      });
 
-//   New added update API
-        app.put('/booking/:bookId', async (req, res) => {
-            const id = req.params.id;
-            const updateBooking = req.body;
-            const query = { _id: ObjectId(id) };
-            const options = { upsert: true };
-            const updateDoc = {
-              $set: {
-                status: updateBooking.status,
-                email: updateBooking.email,
-              },
-            };
-            const result = await bookingCollection.updateOne(query,updateDoc,options);
-            res.json(result);
-        })
+      // My Booking manage  Api
+      app.get("/booking/:email", async (req, res) => {
+        const result = await bookingCollection
+          .find({
+            email: req.params.email,
+          })
+          .toArray();
+        res.send(result);
+      });
 
-        
+      // DELETE Single booking  API
+      app.delete("/booking/:id", async (req, res) => {
+        const id = req.params.id;
+        const query = { _id: ObjectId(id) };
+        const result = await bookingCollection.deleteOne(query);
+        res.json(result);
+      });
 
+      //   New added update API
+      app.put("/booking/:bookId", async (req, res) => {
+        const id = req.params.id;
+        const updateBooking = req.body;
+        const query = { _id: ObjectId(id) };
+        const options = { upsert: true };
+        const updateDoc = {
+          $set: {
+            status: updateBooking.status,
+            email: updateBooking.email,
+          },
+        };
+        const result = await bookingCollection.updateOne(
+          query,
+          updateDoc,
+          options
+        );
+        res.json(result);
+      });
 
-        // /////////////////////////
-        app.delete('/packages/:id', async (req, res) => {
-            const id = req.params.id;
-            const query = { _id: ObjectId(id) };
-            const result = await packagesCollection.deleteOne(query);
-            res.json(result);
-        })
+      //  Search Packages
 
+      // app.get("/packages", async (req, res) => {
+      //     const result = await bookingCollection.find({
+      //     title: { $regex: req.query.search },
+      //     }).toArray();
+      //     res.json(result);
 
-
-        //  Search Packages
-
-        // app.get("/packages", async (req, res) => {
-        //     const result = await bookingCollection.find({
-        //     title: { $regex: req.query.search },
-        //     }).toArray();
-        //     res.json(result);
-            
-        // });
-
-
+      // });
     }
     finally {
         // await client.close();
