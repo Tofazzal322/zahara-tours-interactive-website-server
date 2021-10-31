@@ -85,7 +85,18 @@ async function run() {
             res.json(result);
         })
 
+//   New added update API
+        app.put('/booking/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await bookingCollection.updateOne(query);
+            res.json(result);
+        })
+
         
+
+
+        // /////////////////////////
         app.delete('/packages/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
