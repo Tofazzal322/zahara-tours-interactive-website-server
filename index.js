@@ -91,7 +91,7 @@ async function run() {
             email: req.params.email,
           })
           .toArray();
-        res.send(result);
+        res.json(result);
       });
 
       // DELETE Single booking  API
